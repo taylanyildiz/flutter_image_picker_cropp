@@ -7,56 +7,39 @@ A new Project Flutter
 <img src="ss1.png" height="300" /> <img src="ss2.png" height="300" /> <img src="ss3.png" height="300" /> <img src="ss4.png" height="300" />
 
 ## dependecies:
-<br/>
-  '''
-  <br/>
-  image_picker: ^0.7.4
-  <br/>
-  image_cropper: ^1.4.0
-  <br/>
-  '''
-## Android
- path => android/app/src/main/AndroidManifest.xml
- <br/>
- copy this 
- <br/>
-    '''
-    <activity
-    <br/>
+
+
+```yaml
+  dependencies:
+    flutter:
+      sdk: flutter
+    image_picker: ^0.7.4
+    image_cropper: ^1.4.0
+```
+
+### How to use
+### Android  path => android/app/src/main/AndroidManifest.xml
+ 
+
+```activity
+   <activity
       android:name="com.yalantis.ucrop.UCropActivity"
-      <br/>
       android:screenOrientation="portrait"
-      <br/>
       android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-       <br/>
-      paste in the path directory for ### image_picker
-      <br/>
-    '''
-    <br/>
-## IOS 
-<br/>
-path => ios/Runner/Info.plist
-<br/>
-copy this:
-<br/>
-'''
-<br/>
-<key>NSCameraUsageDescription</key>
-<br/>
-<string>Explanation on why the camera access is needed.</string>	<key>NSPhotoLibraryUsageDescription</key>
-<br/>
-<string>Privacy - Photo Library Usage Description</string>	<key>NSCameraUsageDescription</key>
-<br/>
-<string>Privacy - Camera Usage Description</string>
-<br/>
-<key>NSMicrophoneUsageDescription</key>
-<br/>
-<string>Privacy - Microphone Usage Description</string>
-<br/>
-'''
-<br/>
-paste in the path directory for ### image_cropper
-<br/>
+```
+
+### IOS   path => ios/Runner/Info.plist
+
+```keys
+    <key>NSCameraUsageDescription</key>
+    <string>Explanation on why the camera access is needed.</string>	
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Privacy - Photo Library Usage Description</string>	
+    <key>NSCameraUsageDescription</key>
+    <string>Privacy - Camera Usage Description</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Privacy - Microphone Usage Description</string>
+```
 ## Getting Started
 
 This project is a starting point for a Flutter application.
