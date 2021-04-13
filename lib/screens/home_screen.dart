@@ -27,7 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (imageFiles.length < 3)
       setState(() => imageFiles.add(file));
     else
-      setState(() => imageFiles.insert(index, file));
+      setState(() {
+        imageFiles.removeAt(index);
+        imageFiles.insert(index, file);
+      });
   }
 
   Future<File> cropSquareImage(File imageFile) async {
@@ -62,47 +65,72 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _displayPhoto(context, index) {
-    if (imageFiles.isEmpty)
-      return _imageContainer(context, index);
-    else {
-      return imageFiles[0] != null
-          ? _imageContainer(context, index,
-              images: imageFiles.map((e) => e).elementAt(index))
-          : _imageContainer(context, index);
+    if (imageFiles.isEmpty) return _imageContainer(context, index);
+    if (imageFiles[0] != null) {
+      return index == 0
+          ? _imageContainer(context, index, images: imageFiles[0])
+          : index == 1 && imageFiles.length > 1 && imageFiles[1] != null
+              ? _imageContainer(context, index, images: imageFiles[1])
+              : index == 2 && imageFiles.length > 2 && imageFiles[2] != null
+                  ? _imageContainer(context, index, images: imageFiles[2])
+                  : _imageContainer(context, index);
     }
   }
 
   _imageContainer(context, index, {File images}) {
     return Stack(
       children: [
-        Container(
-          margin: EdgeInsets.all(5.0),
-          width: 120,
-          height: double.infinity,
-          color: Colors.white,
-          child: images != null
-              ? Image.file(
-                  images,
-                  fit: BoxFit.cover,
-                )
-              : Icon(
-                  Icons.image,
-                  color: Colors.red,
+        images == null
+            ? Container(
+                margin: EdgeInsets.all(5.0),
+                width: 120,
+                height: double.infinity,
+                color: Colors.white,
+                child: images != null
+                    ? Image.file(
+                        images,
+                        fit: BoxFit.cover,
+                      )
+                    : Icon(
+                        Icons.image,
+                        color: Colors.red,
+                      ),
+              )
+            : Container(
+                margin: EdgeInsets.all(5.0),
+                width: 120,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
                 ),
-        ),
+                child: images != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Image.file(
+                          images,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : Icon(
+                        Icons.image,
+                        color: Colors.red,
+                      ),
+              ),
         Positioned(
           bottom: 0.0,
           right: 0.0,
           child: GestureDetector(
             onTap: () => _selectPhoto(index),
             child: Container(
+              padding: EdgeInsets.all(5.0),
               decoration: BoxDecoration(
                 color: Colors.blue,
                 shape: BoxShape.circle,
               ),
               child: Center(
                 child: Icon(
-                  Icons.add,
+                  images == null ? Icons.add : Icons.edit,
+                  size: 20.0,
                   color: Colors.white,
                 ),
               ),
