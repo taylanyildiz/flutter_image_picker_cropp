@@ -1,4 +1,4 @@
-package com.example.imge_file_picker
+package com.example.image_picker_crop
 
 import io.flutter.embedding.android.FlutterActivity
 

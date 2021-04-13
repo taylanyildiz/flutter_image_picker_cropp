@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:imge_file_picker/home_screen.dart';
+import 'screens/screens.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Image Picker Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(title: 'Flutter Demo Home Page'),
+      home: HomeScreen(title: 'Flutter Image Picker'),
     );
   }
 }

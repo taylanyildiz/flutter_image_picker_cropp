@@ -1,6 +1,6 @@
 {
-    "name": "imge_file_picker",
-    "short_name": "imge_file_picker",
+    "name": "image_picker_crop",
+    "short_name": "image_picker_crop",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
