@@ -20,10 +20,11 @@ A new Project Flutter
  copy this 
  <br/>
     '''
- <activity
-android:name="com.yalantis.ucrop.UCropActivity"
-android:screenOrientation="portrait"
-android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+    <activity
+      android:name="com.yalantis.ucrop.UCropActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+       <br/>
       paste in the path directory for ### image_picker
       <br/>
     '''
