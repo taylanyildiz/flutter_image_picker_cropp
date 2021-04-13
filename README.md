@@ -9,6 +9,7 @@ A new Project Flutter
 ## dependecies:
 <br/>
   '''
+  <br/>
   image_picker: ^0.7.4
   <br/>
   image_cropper: ^1.4.0
@@ -21,8 +22,11 @@ A new Project Flutter
  <br/>
     '''
     <activity
+    <br/>
       android:name="com.yalantis.ucrop.UCropActivity"
+      <br/>
       android:screenOrientation="portrait"
+      <br/>
       android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
        <br/>
       paste in the path directory for ### image_picker
