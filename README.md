@@ -9,11 +9,13 @@ A new Project Flutter
 ## dependecies:
   '''
   image_picker: ^0.7.4
+  <br/>
   image_cropper: ^1.4.0
   
   '''
 ## Android
  path => android/app/src/main/AndroidManifest.xml
+ <br/>
  copy this 
     '''
      <activity
