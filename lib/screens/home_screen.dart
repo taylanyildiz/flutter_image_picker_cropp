@@ -16,18 +16,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var imageFiles;
+  var imageFiles = <File>[];
 
-  Future _selectPhoto() async {
+  Future _selectPhoto(index) async {
     final file = await Utils.pickMedia(
       isGallery: true,
       cropImage: cropSquareImage,
     );
     if (file == null) return;
-
-    setState(() {
-      imageFiles = file;
-    });
+    if (imageFiles.length < 3)
+      setState(() => imageFiles.add(file));
+    else
+      setState(() => imageFiles.insert(index, file));
   }
 
   Future<File> cropSquareImage(File imageFile) async {
@@ -61,7 +61,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _imageContainer(context, index) {
+  _displayPhoto(context, index) {
+    if (imageFiles.isEmpty)
+      return _imageContainer(context, index);
+    else {
+      return imageFiles[0] != null
+          ? _imageContainer(context, index,
+              images: imageFiles.map((e) => e).elementAt(index))
+          : _imageContainer(context, index);
+    }
+  }
+
+  _imageContainer(context, index, {File images}) {
     return Stack(
       children: [
         Container(
@@ -69,28 +80,31 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 120,
           height: double.infinity,
           color: Colors.white,
-          child: imageFiles != null
+          child: images != null
               ? Image.file(
-                  imageFiles,
+                  images,
                   fit: BoxFit.cover,
                 )
               : Icon(
                   Icons.image,
-                  color: Colors.black,
+                  color: Colors.red,
                 ),
         ),
         Positioned(
           bottom: 0.0,
           right: 0.0,
           child: GestureDetector(
-            onTap: () => _selectPhoto(),
+            onTap: () => _selectPhoto(index),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.blue,
                 shape: BoxShape.circle,
               ),
               child: Center(
-                child: Icon(Icons.add),
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
@@ -129,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: 3,
                   itemBuilder: (context, index) =>
-                      _imageContainer(context, index),
+                      _displayPhoto(context, index),
                 ),
               )
             ],
