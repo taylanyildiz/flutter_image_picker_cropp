@@ -35,8 +35,6 @@ A new Project Flutter
     <string>Explanation on why the camera access is needed.</string>	
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Privacy - Photo Library Usage Description</string>	
-    <key>NSCameraUsageDescription</key>
-    <string>Privacy - Camera Usage Description</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Privacy - Microphone Usage Description</string>
 ```
