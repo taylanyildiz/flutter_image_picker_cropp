@@ -17,7 +17,7 @@ Image picker  & image cropper and cupertinosheet
     image_cropper: ^1.4.0
 ```
 
-### How to use
+## How to use
 ```dart
    Future _selectPhoto(index) async {
     final file = await Utils.pickMedia(
