@@ -19,40 +19,72 @@ Image picker  & image cropper and cupertinosheet
 
 ## How to use
 ```dart
-   Future _selectPhoto(index) async {
-    final file = await Utils.pickMedia(
-      isGallery: isGallery,
-      cropImage: cropSquareImage,
+  enum SourceCode {
+    gallery,
+    camera,
+  }
+
+  class UtilsImage {
+    static Future<File> imagePicker({
+      @required SourceCode sourceCode,
+      @required Future<File> Function(File file) croppImage,
+    }) async {
+      final source = sourceCode == SourceCode.gallery
+          ? ImageSource.gallery
+          : ImageSource.camera;
+      final pickerImage = await ImagePicker().getImage(source: source);
+      if (pickerImage == null) return null;
+      if (croppImage == null)
+        return File(pickerImage.path);
+      else
+        return croppImage(File(pickerImage.path));
+    }
+  }
+```
+
+
+```dart
+    var imagesFile = <File>[];
+
+  Future selectPhoto(index, sourceCode) async {
+    final file = await UtilsImage.imagePicker(
+      sourceCode: sourceCode,
+      croppImage: croppImage,
     );
     if (file == null) return;
-    if (imageFiles.length < 3)
-      setState(() => imageFiles.add(file));
-    else
-      setState(() {
-        imageFiles.removeAt(index);
-        imageFiles.insert(index, file);
-      });
+    if (imagesFile.length == (index + 1)) {
+      imagesFile.removeAt(index);
+      setState(() => imagesFile.insert(index, file));
+    } else
+      setState(() => imagesFile.add(file));
   }
 
-  Future<File> cropSquareImage(File imageFile) async {
+  Future<File> croppImage(File imageFile) async {
     return await ImageCropper.cropImage(
       sourcePath: imageFile.path,
-      aspectRatio: CropAspectRatio(ratioX: 0.5, ratioY: .5),
-      aspectRatioPresets: [CropAspectRatioPreset.square],
-      compressQuality: 70,
+      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      maxHeight: 100,
+      maxWidth: 100,
       compressFormat: ImageCompressFormat.png,
       androidUiSettings: androidUiSettingsLock(),
-      iosUiSettings: iosUiSettingsLock(),
+      iosUiSettings: iosUiSettings(),
     );
   }
 
-  IOSUiSettings iosUiSettingsLock() {
+  AndroidUiSettings androidUiSettingsLock() {
+    return AndroidUiSettings(
+      lockAspectRatio: false,
+      toolbarTitle: 'Image Cropper',
+      toolbarColor: Colors.orange,
+      toolbarWidgetColor: Colors.white,
+      activeControlsWidgetColor: Colors.white,
+      hideBottomControls: true,
+    );
+  }
+
+  IOSUiSettings iosUiSettings() {
     return IOSUiSettings(
-      aspectRatioLockEnabled: true,
-      rotateButtonsHidden: false,
-      rectX: 1.0,
-      rectY: 1.0,
-      rotateClockwiseButtonHidden: false,
+      minimumAspectRatio: 1.0,
     );
   }
 ```
