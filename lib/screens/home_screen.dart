@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
@@ -14,9 +15,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var imagesFile = <File>[];
-  Future selectPhoto(index) async {
+
+  Future selectPhoto(index, sourceCode) async {
     final file = await UtilsImage.imagePicker(
-      sourceCode: SourceCode.gallery,
+      sourceCode: sourceCode,
       croppImage: croppImage,
     );
     if (file == null) return;
@@ -91,7 +93,44 @@ class _HomeScreenState extends State<HomeScreen> {
           right: 0.0,
           bottom: 0.0,
           child: GestureDetector(
-            onTap: () => selectPhoto(index),
+            onTap: () async {
+              await showCupertinoModalPopup(
+                context: context,
+                builder: (context) => CupertinoActionSheet(
+                  actions: [
+                    CupertinoActionSheetAction(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        selectPhoto(index, SourceCode.gallery);
+                      },
+                      child: Text('Select a Photo'),
+                      isDestructiveAction: true,
+                    ),
+                    CupertinoActionSheetAction(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        selectPhoto(index, SourceCode.camera);
+                      },
+                      child: Text('Take a Photo'),
+                      isDestructiveAction: false,
+                    ),
+                    CupertinoActionSheetAction(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if (imagesFile.isNotEmpty)
+                          setState(() => imagesFile.removeAt(index));
+                      },
+                      child: Text('Delete Photo'),
+                      isDestructiveAction: false,
+                    ),
+                  ],
+                  cancelButton: CupertinoActionSheetAction(
+                    child: Text('Çık'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+              );
+            },
             child: Container(
               padding: const EdgeInsets.all(5.0),
               decoration: BoxDecoration(
