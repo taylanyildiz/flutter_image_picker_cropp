@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
           margin: EdgeInsets.all(5.0),
           width: 100.0,
           height: double.infinity,
-          color: Colors.blue.withOpacity(.6),
+          color: Colors.white,
           child: child,
         ),
         Positioned(
@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.blue,
               ),
               child: Icon(
-                Icons.add,
+                img != null ? Icons.edit : Icons.add,
                 color: Colors.white,
               ),
             ),
@@ -112,13 +112,27 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
+            margin: EdgeInsets.only(bottom: 40.0, left: 20.0),
+            child: Text(
+              'Select a Photo',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 20.0),
             width: MediaQuery.of(context).size.width,
             height: 150.0,
-            color: Colors.orange,
+            color: Colors.black,
             child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               scrollDirection: Axis.horizontal,
