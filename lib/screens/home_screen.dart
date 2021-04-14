@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -17,10 +18,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var imageFiles = <File>[];
+  bool isGallery = false;
 
   Future _selectPhoto(index) async {
     final file = await Utils.pickMedia(
-      isGallery: true,
+      isGallery: isGallery,
       cropImage: cropSquareImage,
     );
     if (file == null) return;
@@ -36,10 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<File> cropSquareImage(File imageFile) async {
     return await ImageCropper.cropImage(
       sourcePath: imageFile.path,
-      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      aspectRatio: CropAspectRatio(ratioX: 0.5, ratioY: .5),
       aspectRatioPresets: [CropAspectRatioPreset.square],
       compressQuality: 70,
-      compressFormat: ImageCompressFormat.jpg,
+      compressFormat: ImageCompressFormat.png,
       androidUiSettings: androidUiSettingsLock(),
       iosUiSettings: iosUiSettingsLock(),
     );
@@ -59,8 +61,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return AndroidUiSettings(
       toolbarColor: Colors.white,
       toolbarTitle: 'Cropp Image',
-      toolbarWidgetColor: Colors.white,
+      toolbarWidgetColor: Colors.red,
       hideBottomControls: true,
+      cropFrameColor: Colors.red,
+      activeControlsWidgetColor: Colors.red,
+      lockAspectRatio: true,
     );
   }
 
@@ -120,7 +125,36 @@ class _HomeScreenState extends State<HomeScreen> {
           bottom: 0.0,
           right: 0.0,
           child: GestureDetector(
-            onTap: () => _selectPhoto(index),
+            onTap: () async {
+              await showCupertinoModalPopup(
+                context: context,
+                builder: (context) => CupertinoActionSheet(
+                    actions: [
+                      CupertinoActionSheetAction(
+                        onPressed: () {
+                          isGallery = true;
+                          Navigator.pop(context);
+                          _selectPhoto(index);
+                        },
+                        child: Text('Select a Photo'),
+                        isDestructiveAction: true,
+                      ),
+                      CupertinoActionSheetAction(
+                        onPressed: () {
+                          isGallery = false;
+                          Navigator.pop(context);
+                          _selectPhoto(index);
+                        },
+                        child: Text('Take a Photo'),
+                        isDestructiveAction: false,
+                      ),
+                    ],
+                    cancelButton: CupertinoActionSheetAction(
+                      child: Text('Çık'),
+                      onPressed: () => Navigator.pop(context),
+                    )),
+              );
+            },
             child: Container(
               padding: EdgeInsets.all(5.0),
               decoration: BoxDecoration(
@@ -173,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) =>
                       _displayPhoto(context, index),
                 ),
-              )
+              ),
             ],
           ),
           Positioned(
