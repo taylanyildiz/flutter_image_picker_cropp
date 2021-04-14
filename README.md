@@ -18,6 +18,44 @@ Image picker  & image cropper and cupertinosheet
 ```
 
 ### How to use
+```dart
+   Future _selectPhoto(index) async {
+    final file = await Utils.pickMedia(
+      isGallery: isGallery,
+      cropImage: cropSquareImage,
+    );
+    if (file == null) return;
+    if (imageFiles.length < 3)
+      setState(() => imageFiles.add(file));
+    else
+      setState(() {
+        imageFiles.removeAt(index);
+        imageFiles.insert(index, file);
+      });
+  }
+
+  Future<File> cropSquareImage(File imageFile) async {
+    return await ImageCropper.cropImage(
+      sourcePath: imageFile.path,
+      aspectRatio: CropAspectRatio(ratioX: 0.5, ratioY: .5),
+      aspectRatioPresets: [CropAspectRatioPreset.square],
+      compressQuality: 70,
+      compressFormat: ImageCompressFormat.png,
+      androidUiSettings: androidUiSettingsLock(),
+      iosUiSettings: iosUiSettingsLock(),
+    );
+  }
+
+  IOSUiSettings iosUiSettingsLock() {
+    return IOSUiSettings(
+      aspectRatioLockEnabled: true,
+      rotateButtonsHidden: false,
+      rectX: 1.0,
+      rectY: 1.0,
+      rotateClockwiseButtonHidden: false,
+    );
+  }
+```
 ### Android  path => android/app/src/main/AndroidManifest.xml
  
 
