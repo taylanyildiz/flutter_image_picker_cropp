@@ -88,6 +88,136 @@ Image picker  & image cropper and cupertinosheet
     );
   }
 ```
+### build
+```dart
+_controllerImageFile(contex, index) {
+    if (imagesFile.isEmpty) return displayImageFile(context, index);
+    return index == 0
+        ? displayImageFile(context, index, img: imagesFile[0])
+        : index == 1 && imagesFile.length > 1 && imagesFile[1] != null
+            ? displayImageFile(context, index, img: imagesFile[1])
+            : index == 2 && imagesFile.length > 2 && imagesFile[2] != null
+                ? displayImageFile(context, index, img: imagesFile[2])
+                : displayImageFile(context, index);
+  }
+
+  displayImageFile(context, index, {img}) {
+    final child = img == null
+        ? Icon(
+            Icons.image,
+            color: Colors.red,
+            size: 35.0,
+          )
+        : Image.file(
+            img,
+            fit: BoxFit.cover,
+          );
+    return Stack(
+      children: [
+        Container(
+          margin: EdgeInsets.all(5.0),
+          width: 100.0,
+          height: double.infinity,
+          color: Colors.white,
+          child: child,
+        ),
+        Positioned(
+          right: 0.0,
+          bottom: 0.0,
+          child: GestureDetector(
+            onTap: () async {
+              await showCupertinoModalPopup(
+                context: context,
+                builder: (context) => CupertinoActionSheet(
+                  actions: [
+                    CupertinoActionSheetAction(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        selectPhoto(index, SourceCode.gallery);
+                      },
+                      child: Text('Select a Photo'),
+                      isDestructiveAction: true,
+                    ),
+                    CupertinoActionSheetAction(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        selectPhoto(index, SourceCode.camera);
+                      },
+                      child: Text('Take a Photo'),
+                      isDestructiveAction: false,
+                    ),
+                    CupertinoActionSheetAction(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if (imagesFile.isNotEmpty)
+                          setState(() => imagesFile.removeAt(index));
+                      },
+                      child: Text('Delete Photo'),
+                      isDestructiveAction: false,
+                    ),
+                  ],
+                  cancelButton: CupertinoActionSheetAction(
+                    child: Text('Çık'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue,
+              ),
+              child: Icon(
+                img != null ? Icons.edit : Icons.add,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 40.0, left: 20.0),
+            child: Text(
+              'Select a Photo',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 20.0),
+            width: MediaQuery.of(context).size.width,
+            height: 150.0,
+            color: Colors.black,
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: 3,
+              itemBuilder: (context, index) =>
+                  _controllerImageFile(context, index),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+```
 ### Android  path => android/app/src/main/AndroidManifest.xml
  
 
