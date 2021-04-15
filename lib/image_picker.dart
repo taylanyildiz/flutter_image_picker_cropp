@@ -194,6 +194,7 @@ class _ImagePickerState extends State<ImagePicker> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width,
       color: widget.backgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

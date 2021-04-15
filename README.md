@@ -4,7 +4,7 @@ Image picker  & image cropper and cupertinosheet
 
 
 ## Screenshots
-<img src="ss1.png" height="300" /> <img src="ss2.png" height="300" /> <img src="ss3.png" height="300" /><img src="ss4.png" height="300" /> 
+<img src="ss1.png" height="300" /> <img src="ss2.png" height="300" /> <img src="ss3.png" height="300" /><img src="ss4.png" height="300" /><img src="ss5.png" height="300" /> 
 
 ## dependencies:
 
