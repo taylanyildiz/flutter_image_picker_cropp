@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:function_test/utils_image.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
 
+import 'package:image_picker_crop/utils_image.dart';
+
 class ImagePicker extends StatefulWidget {
   final String title;
-  bool isGallery;
   IconData iconAdd;
   IconData iconEdit;
   Color backgroundColor;
@@ -22,7 +22,6 @@ class ImagePicker extends StatefulWidget {
   ImagePicker({
     Key key,
     @required this.selectionPhoto,
-    bool isGallery,
     this.title,
     IconData iconAdd,
     IconData iconEdit,
@@ -43,7 +42,6 @@ class ImagePicker extends StatefulWidget {
         iconEdit = iconEdit ?? Icons.edit,
         height = height ?? 200.0,
         width = width ?? 100.0,
-        isGallery = isGallery ?? true,
         androidUiSettingsLock = androidUiSettingsLock ??
             AndroidUiSettings(
               lockAspectRatio: false,
@@ -66,9 +64,10 @@ class ImagePicker extends StatefulWidget {
 
 class _ImagePickerState extends State<ImagePicker> {
   final imageFiles = <File>[];
+  bool isGallery = false;
   Future selectPhoto(index) async {
     final file = await UtilsImage.mediaPicker(
-      isGallery: widget.isGallery,
+      isGallery: isGallery,
       croppImage: croppImage,
     );
     if (file == null) return;
@@ -93,13 +92,17 @@ class _ImagePickerState extends State<ImagePicker> {
   Future<List<Widget>> dispLayWidget() async {
     final displaylist = <Widget>[];
     Widget child;
+    Widget icon;
+    bool checkImage = false;
     for (var index = 1; index <= widget.itemCount; index++) {
       if (imageFiles.length >= index) {
+        checkImage = true;
         child = Image.file(
           imageFiles[index - 1],
           fit: BoxFit.cover,
         );
       } else {
+        checkImage = false;
         child = Icon(
           Icons.image,
           color: Colors.red,
@@ -120,17 +123,40 @@ class _ImagePickerState extends State<ImagePicker> {
               right: 0.0,
               bottom: 0.0,
               child: GestureDetector(
-                onTap: () => selectPhoto(index),
+                onTap: () async {
+                  await showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => CupertinoActionSheet(
+                      actions: [
+                        CupertinoActionSheetAction(
+                          child: const Text('Select Photo'),
+                          onPressed: () {
+                            isGallery = true;
+                            Navigator.pop(context);
+                          },
+                        ),
+                        CupertinoActionSheetAction(
+                          child: const Text('Take Photo'),
+                          onPressed: () {
+                            isGallery = false;
+                            Navigator.pop(context);
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                  selectPhoto(index);
+                },
                 child: Container(
-                  padding: EdgeInsets.all(2.0),
+                  padding: EdgeInsets.all(4.0),
                   decoration: BoxDecoration(
                     color: widget.buttonColor,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    widget.iconAdd,
+                    checkImage ? widget.iconEdit : widget.iconAdd,
                     color: widget.iconColor,
-                    size: 25.0,
+                    size: 20.0,
                   ),
                 ),
               ),
