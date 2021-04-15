@@ -97,9 +97,12 @@ class _ImagePickerState extends State<ImagePicker> {
     for (var index = 1; index <= widget.itemCount; index++) {
       if (imageFiles.length >= index) {
         checkImage = true;
-        child = Image.file(
-          imageFiles[index - 1],
-          fit: BoxFit.cover,
+        child = ClipRRect(
+          borderRadius: BorderRadius.circular(15.0),
+          child: Image.file(
+            imageFiles[index - 1],
+            fit: BoxFit.cover,
+          ),
         );
       } else {
         checkImage = false;
@@ -116,7 +119,10 @@ class _ImagePickerState extends State<ImagePicker> {
               margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
               width: widget.width,
               height: widget.height,
-              color: widget.backgroundImage,
+              decoration: BoxDecoration(
+                color: widget.backgroundImage,
+                borderRadius: BorderRadius.circular(checkImage ? 15.0 : 0.0),
+              ),
               child: child,
             ),
             Positioned(
