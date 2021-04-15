@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:image_picker_crop/image_picker.dart';
 import 'package:image_picker_crop/pfoile_screen.dart';
-
-import 'image_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -40,11 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(color: Colors.white, fontSize: 17.0),
               ),
               onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PofileScreen(
-                            imageFile: imagesFile,
-                          ))),
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PofileScreen(
+                    imageFile: imagesFile,
+                  ),
+                ),
+              ),
             ),
           ),
         ],
