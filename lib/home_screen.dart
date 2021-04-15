@@ -26,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
               imagesFile = file;
             },
             backgroundColor: Colors.black,
+            backgroundImage: Colors.blue,
+            iconColor: Colors.white,
           ),
           SizedBox(height: 20.0),
           SizedBox(
