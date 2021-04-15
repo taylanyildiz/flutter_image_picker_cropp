@@ -15,11 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen(
-        title: 'Flutter Select Photo',
-        itemCount: 4,
-        height: 120.0,
-      ),
+      home: HomeScreen(),
     );
   }
 }

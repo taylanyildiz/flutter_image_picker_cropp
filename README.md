@@ -43,178 +43,76 @@ class UtilsImage {
 ## example
 
 ```dart
-    var imagesFile = <File>[];
-
-  Future selectPhoto(index, sourceCode) async {
-    final file = await UtilsImage.imagePicker(
-      sourceCode: sourceCode,
-      croppImage: croppImage,
-    );
-    if (file == null) return;
-    if (imagesFile.length == (index + 1)) {
-      imagesFile.removeAt(index);
-      setState(() => imagesFile.insert(index, file));
-    } else
-      setState(() => imagesFile.add(file));
-  }
-
-  Future<File> croppImage(File imageFile) async {
-    return await ImageCropper.cropImage(
-      sourcePath: imageFile.path,
-      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-      maxHeight: 100,
-      maxWidth: 100,
-      compressFormat: ImageCompressFormat.png,
-      androidUiSettings: androidUiSettingsLock(),
-      iosUiSettings: iosUiSettings(),
-    );
-  }
-
-  AndroidUiSettings androidUiSettingsLock() {
-    return AndroidUiSettings(
-      lockAspectRatio: false,
-      toolbarTitle: 'Image Cropper',
-      toolbarColor: Colors.orange,
-      toolbarWidgetColor: Colors.white,
-      activeControlsWidgetColor: Colors.white,
-      hideBottomControls: true,
-    );
-  }
-
-  IOSUiSettings iosUiSettings() {
-    return IOSUiSettings(
-      minimumAspectRatio: 1.0,
-    );
-  }
+   ImagePicker(
+    title: 'Flutter Select Photo',
+    itemCount: 4,
+    height: 120.0,
+    selectionPhoto: (file) {
+      print(file.length);
+    },
+    backgroundColor: Colors.black,
+  ),
 ```
 ### build
 ```dart
-_controllerImageFile(contex, index) {
-    if (imagesFile.isEmpty) return displayImageFile(context, index);
-    return index == 0
-        ? displayImageFile(context, index, img: imagesFile[0])
-        : index == 1 && imagesFile.length > 1 && imagesFile[1] != null
-            ? displayImageFile(context, index, img: imagesFile[1])
-            : index == 2 && imagesFile.length > 2 && imagesFile[2] != null
-                ? displayImageFile(context, index, img: imagesFile[2])
-                : displayImageFile(context, index);
-  }
-
-  displayImageFile(context, index, {img}) {
-    final child = img == null
-        ? Icon(
-            Icons.image,
-            color: Colors.red,
-            size: 35.0,
-          )
-        : Image.file(
-            img,
-            fit: BoxFit.cover,
-          );
-    return Stack(
-      children: [
-        Container(
-          margin: EdgeInsets.all(5.0),
-          width: 100.0,
-          height: double.infinity,
-          color: Colors.white,
-          child: child,
-        ),
-        Positioned(
-          right: 0.0,
-          bottom: 0.0,
-          child: GestureDetector(
-            onTap: () async {
-              await showCupertinoModalPopup(
-                context: context,
-                builder: (context) => CupertinoActionSheet(
-                  actions: [
-                    CupertinoActionSheetAction(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        selectPhoto(index, SourceCode.gallery);
-                      },
-                      child: Text('Select a Photo'),
-                      isDestructiveAction: true,
-                    ),
-                    CupertinoActionSheetAction(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        selectPhoto(index, SourceCode.camera);
-                      },
-                      child: Text('Take a Photo'),
-                      isDestructiveAction: false,
-                    ),
-                    CupertinoActionSheetAction(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        if (imagesFile.isNotEmpty)
-                          setState(() => imagesFile.removeAt(index));
-                      },
-                      child: Text('Delete Photo'),
-                      isDestructiveAction: false,
-                    ),
-                  ],
-                  cancelButton: CupertinoActionSheetAction(
-                    child: Text('Çık'),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.all(5.0),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.blue,
-              ),
-              child: Icon(
-                img != null ? Icons.edit : Icons.add,
-                color: Colors.white,
-              ),
+class ImagePicker extends StatefulWidget {
+  final String title;
+  bool isGallery;
+  IconData iconAdd;
+  IconData iconEdit;
+  Color backgroundColor;
+  Color backgroundImage;
+  Color buttonColor;
+  Color iconColor;
+  double height;
+  double width;
+  final int itemCount;
+  final Function(List<File>) selectionPhoto;
+  AndroidUiSettings androidUiSettingsLock;
+  IOSUiSettings iosUiSettings;
+  ImagePicker({
+    Key key,
+    @required this.selectionPhoto,
+    bool isGallery,
+    this.title,
+    IconData iconAdd,
+    IconData iconEdit,
+    Color backgroundImage,
+    Color backgroundColor,
+    Color buttonColor,
+    Color iconColor,
+    double height,
+    double width,
+    this.itemCount,
+    AndroidUiSettings androidUiSettingsLock,
+    IOSUiSettings iosUiSettings,
+  })  : backgroundColor = backgroundColor ?? Colors.black,
+        backgroundImage = backgroundImage ?? Colors.white,
+        buttonColor = buttonColor ?? Colors.blue,
+        iconColor = iconColor ?? Colors.white,
+        iconAdd = iconAdd ?? Icons.add,
+        iconEdit = iconEdit ?? Icons.edit,
+        height = height ?? 200.0,
+        width = width ?? 100.0,
+        isGallery = isGallery ?? true,
+        androidUiSettingsLock = androidUiSettingsLock ??
+            AndroidUiSettings(
+              lockAspectRatio: false,
+              toolbarTitle: 'Image Cropper',
+              toolbarColor: Colors.orange,
+              toolbarWidgetColor: Colors.white,
+              activeControlsWidgetColor: Colors.white,
+              hideBottomControls: true,
             ),
-          ),
-        ),
-      ],
-    );
-  }
+        iosUiSettings = iosUiSettings ??
+            IOSUiSettings(
+              minimumAspectRatio: 1.0,
+            ),
+        assert(itemCount >= 3),
+        super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: EdgeInsets.only(bottom: 40.0, left: 20.0),
-            child: Text(
-              'Select a Photo',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 20.0),
-            width: MediaQuery.of(context).size.width,
-            height: 150.0,
-            color: Colors.black,
-            child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: 3,
-              itemBuilder: (context, index) =>
-                  _controllerImageFile(context, index),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  _ImagePickerState createState() => _ImagePickerState();
 }
 ```
 ### Android  path => android/app/src/main/AndroidManifest.xml
