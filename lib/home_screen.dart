@@ -13,6 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -20,12 +21,14 @@ class _HomeScreenState extends State<HomeScreen> {
             title: 'Flutter Select Photo',
             itemCount: 4,
             height: 120.0,
+            backgroundColor: Colors.white,
+            backgroundImage: Colors.orange,
+            iconColor: Colors.white,
+            iconEditColor: Colors.red,
+            iconAddColor: Colors.white,
             selectionPhoto: (file) {
               imagesFile = file;
             },
-            backgroundColor: Colors.black,
-            backgroundImage: Colors.blue,
-            iconColor: Colors.white,
           ),
           SizedBox(height: 20.0),
           SizedBox(
