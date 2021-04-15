@@ -53,11 +53,10 @@ class UtilsImage {
     backgroundColor: Colors.black,
   ),
 ```
-### build
+### ImagePicker class
 ```dart
 class ImagePicker extends StatefulWidget {
   final String title;
-  bool isGallery;
   IconData iconAdd;
   IconData iconEdit;
   Color backgroundColor;
@@ -73,7 +72,6 @@ class ImagePicker extends StatefulWidget {
   ImagePicker({
     Key key,
     @required this.selectionPhoto,
-    bool isGallery,
     this.title,
     IconData iconAdd,
     IconData iconEdit,
@@ -94,7 +92,6 @@ class ImagePicker extends StatefulWidget {
         iconEdit = iconEdit ?? Icons.edit,
         height = height ?? 200.0,
         width = width ?? 100.0,
-        isGallery = isGallery ?? true,
         androidUiSettingsLock = androidUiSettingsLock ??
             AndroidUiSettings(
               lockAspectRatio: false,
