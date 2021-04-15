@@ -135,23 +135,40 @@ class _ImagePickerState extends State<ImagePicker> {
                     builder: (context) => CupertinoActionSheet(
                       actions: [
                         CupertinoActionSheetAction(
+                          isDefaultAction: true,
                           child: const Text('Select Photo'),
                           onPressed: () {
                             isGallery = true;
+
                             Navigator.pop(context);
+                            selectPhoto(index);
                           },
                         ),
                         CupertinoActionSheetAction(
+                          isDestructiveAction: true,
                           child: const Text('Take Photo'),
                           onPressed: () {
                             isGallery = false;
                             Navigator.pop(context);
+                            selectPhoto(index);
+                          },
+                        ),
+                        CupertinoActionSheetAction(
+                          isDefaultAction: false,
+                          child: const Text('Delete Photo'),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            if (imageFiles.length >= index) {
+                              setState(() {
+                                imageFiles.removeAt(index - 1);
+                              });
+                            }
+                            widget.selectionPhoto(imageFiles);
                           },
                         )
                       ],
                     ),
                   );
-                  selectPhoto(index);
                 },
                 child: Container(
                   padding: EdgeInsets.all(4.0),
